@@ -17,7 +17,7 @@ public class ClientProxy implements InvocationHandler {
 //    private String host;
 //    private int port;
     private RpcClient rpcClient;
-    public ClientProxy(){
+    public ClientProxy() throws InterruptedException{
         rpcClient = new NettyRpcClient();
     }
 

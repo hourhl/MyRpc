@@ -1,5 +1,8 @@
 package Client.netty.nettyInitializer;
 
+import Common.serializer.myCode.MyDecoder;
+import Common.serializer.myCode.MyEncoder;
+import Common.serializer.mySerializer.JsonSerializer;
 import Client.netty.handler.NettyClientHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -14,6 +17,7 @@ public class NettyClientInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
+        /**
         // 消息格式 [长度][消息体]，解决沾包问题
         pipeline.addLast(
                 new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
@@ -31,6 +35,12 @@ public class NettyClientInitializer extends ChannelInitializer<SocketChannel> {
             }
         }));
 
+        pipeline.addLast(new NettyClientHandler());
+         **/
+
+        // 使用自定义的编/解码器
+        pipeline.addLast(new MyEncoder(new JsonSerializer()));
+        pipeline.addLast(new MyDecoder());
         pipeline.addLast(new NettyClientHandler());
     }
 }
