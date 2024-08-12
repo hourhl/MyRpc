@@ -39,8 +39,7 @@ public class serviceCache {
         if(!cache.containsKey(serviceName)) {
             return null;
         }
-        List<String> a = cache.get(serviceName);
-        return a;
+        return cache.get(serviceName);
     }
 
     // 从缓存中删除本地服务
