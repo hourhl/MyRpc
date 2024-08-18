@@ -33,6 +33,7 @@ public class MyDecoder extends ByteToMessageDecoder {
         // 4. 读取序列化数据
         byte[] bytes = new byte[length];
         in.readBytes(bytes);
+        System.out.println("byte == " + new String(bytes));
         Object deserializer = serializer.deserialize(bytes, messageType);
         out.add(deserializer);
     }
