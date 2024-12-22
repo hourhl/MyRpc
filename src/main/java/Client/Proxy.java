@@ -1,6 +1,5 @@
-package Client.Proxy;
+package Client;
 
-import Client.IOClient;
 import common.Message.RpcRequest;
 import common.Message.RpcResponse;
 import lombok.AllArgsConstructor;
@@ -9,12 +8,11 @@ import lombok.Data;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 
 @Data
 @Builder
 @AllArgsConstructor
-public class proxy implements InvocationHandler {
+public class Proxy implements InvocationHandler {
     private String host;
     private int port;
 
@@ -27,12 +25,12 @@ public class proxy implements InvocationHandler {
                 .parameters(args)
                 .paramTypes(method.getParameterTypes()).build();
 
-        RpcResponse response = IOClient.sendRequest(request);
+        RpcResponse response = IOClient.sendRequest(host, port, request);
         return response.getData();
     }
 
     public <T>T getProxy(Class<T> clazz) {
-        Object o = Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, this);
+        Object o = java.lang.reflect.Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, this);
         return (T) o;
     }
 }
