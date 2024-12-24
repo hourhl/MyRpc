@@ -5,6 +5,7 @@ import common.Message.RpcResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.java.Log;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -12,6 +13,7 @@ import java.lang.reflect.Method;
 @Data
 @Builder
 @AllArgsConstructor
+@Log
 public class Proxy implements InvocationHandler {
     private String host;
     private int port;
@@ -25,6 +27,7 @@ public class Proxy implements InvocationHandler {
                 .parameters(args)
                 .paramTypes(method.getParameterTypes()).build();
 
+        log.info("Send request : " + request);
         RpcResponse response = IOClient.sendRequest(host, port, request);
         return response.getData();
     }

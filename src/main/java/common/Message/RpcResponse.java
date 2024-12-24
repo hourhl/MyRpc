@@ -20,10 +20,10 @@ public class RpcResponse implements Serializable {
                 .data(data).build();
     }
 
-    public static RpcResponse fail(Object data) {
+    public static RpcResponse fail() {
         return RpcResponse.builder()
                 .code(500)
                 .msg("Fail")
-                .data(data).build();
+                .data(null).build();
     }
 }
