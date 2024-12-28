@@ -35,9 +35,9 @@ public class ThreadPoolRPCRPCServer implements RPCServer {
 
     @Override
     public void start(int port){
-        System.out.println("Rpc start");
+        System.out.println("Rpc start(ThreadPoolRPCRPCServer)");
         try {
-            ServerSocket serverSocket = new ServerSocket();
+            ServerSocket serverSocket = new ServerSocket(port);
             while (true) {
                 Socket socket = serverSocket.accept();
                 threadPoolExecutor.execute(new WorkThread(socket, serviceProvider));

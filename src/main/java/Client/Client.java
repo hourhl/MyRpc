@@ -8,9 +8,9 @@ import lombok.extern.java.Log;
 public class Client {
     public static void main(String[] args) {
         Proxy clientProxy = new Proxy("127.0.0.1", 666);
-        UserService proxy = clientProxy.getProxy(UserService.class);
+        UserService userServiceProxy = clientProxy.getProxy(UserService.class);
 
-        User user = proxy.getUserById(3);
+        User user = userServiceProxy.getUserById(1);
         log.info("getUserById from server : " + user.toString());
     }
 }

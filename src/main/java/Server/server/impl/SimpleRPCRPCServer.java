@@ -18,7 +18,7 @@ public class SimpleRPCRPCServer implements RPCServer {
     public void start(int port){
         try {
             ServerSocket serverSocket = new ServerSocket(port);
-            log.info("RPC start");
+            log.info("RPC start(SimpleRPCRPCServer)");
             while(true) {
                 Socket socket = serverSocket.accept();
                 new Thread(new WorkThread(socket, serviceProvider)).start();

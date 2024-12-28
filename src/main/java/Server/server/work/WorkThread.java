@@ -43,6 +43,7 @@ public class WorkThread implements Runnable{
     private RpcResponse getResponse(RpcRequest rpcRequest) {
         String interfaceName = rpcRequest.getInterfaceName();
         Object service = serviceProvider.getService(interfaceName);
+        log.info("getResponse interfaceName : " + interfaceName + " serviceName : " + service.getClass().getName());
         // 反射调用方法
         Method method = null;
         try {

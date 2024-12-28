@@ -18,11 +18,12 @@ public class ServiceProvider {
     // 注册服务
     public void provideServiceInterface(Object service) {
         String serviceName = service.getClass().getName();
+        log.info("provideServiceInterface - serviceName :" + serviceName);
         Class<?>[] interfaceName = service.getClass().getInterfaces();
 
         for(Class<?> clazz : interfaceName){
             interfaceProvider.put(clazz.getName(), service);
-            log.info("add service - " + clazz.getName() + " : " + service);
+            log.info("add interface - " + clazz.getName() + " : " + service);
         }
     }
 
