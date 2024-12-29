@@ -1,7 +1,9 @@
-package Client;
+package Client.rpc;
 
 import common.Message.RpcRequest;
 import common.Message.RpcResponse;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.java.Log;
 
 import java.io.IOException;
@@ -10,9 +12,14 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 @Log
-public class IOClient {
+@AllArgsConstructor
+@Data
+public class SocketClient implements BaseClient {
+    private String host;
+    private int port;
 
-    public static RpcResponse sendRequest(String host , int port, RpcRequest request){
+    @Override
+    public RpcResponse sendRequest(RpcRequest request){
         try {
             // 建立连接
             Socket socket = new Socket(host, port);
