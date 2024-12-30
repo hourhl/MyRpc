@@ -33,9 +33,10 @@ public class NettyClient implements BaseClient{
 
     @Override
     public RpcResponse sendRequest(RpcRequest rpcRequest) {
+        Channel channel = null;
         try {
             ChannelFuture channelFuture = bootstrap.connect(host, port).sync();
-            Channel channel = channelFuture.channel();
+            channel = channelFuture.channel();
 
             channel.writeAndFlush(rpcRequest);
             channel.closeFuture().sync();
@@ -47,7 +48,14 @@ public class NettyClient implements BaseClient{
             return rpcResponse;
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            shutdown();
         }
         return null;
+    }
+
+    public void shutdown() {
+        eventLoopGroup.shutdownGracefully();
+        log.info("NettyClient shutdown");
     }
 }

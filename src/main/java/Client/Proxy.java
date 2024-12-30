@@ -18,9 +18,9 @@ public class Proxy implements InvocationHandler {
     private BaseClient client;
 
     public Proxy(String host, int port, int type){
-        if(type == 1){
+        if(type == 0){
             client = new SocketClient(host, port);
-        } else {
+        } else if (type == 1){
             client = new NettyClient(host, port);
         }
     }
