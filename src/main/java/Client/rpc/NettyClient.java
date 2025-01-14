@@ -19,8 +19,6 @@ import lombok.extern.java.Log;
 @Data
 @Log
 public class NettyClient implements BaseClient{
-    private String host;
-    private int port;
     private static final Bootstrap bootstrap;
     private static final EventLoopGroup eventLoopGroup;
 

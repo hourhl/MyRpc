@@ -17,16 +17,20 @@ import java.lang.reflect.Method;
 public class Proxy implements InvocationHandler {
     private BaseClient client;
 
-    public Proxy(String host, int port, int type){
-        if(type == 0){
-            client = new SocketClient(host, port);
-        } else if (type == 1){
-            client = new NettyClient(host, port);
-        }
+//    public Proxy(String host, int port, int type){
+//        if(type == 0){
+//            client = new SocketClient(host, port);
+//        } else if (type == 1){
+//            client = new NettyClient(host, port);
+//        }
+//    }
+    public Proxy(){
+        client = new NettyClient();
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        log.info("Proxy.invoke: " + method.getName());
         //create request
         RpcRequest request = RpcRequest.builder()
                 .interfaceName(method.getDeclaringClass().getName())
