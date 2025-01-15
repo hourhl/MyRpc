@@ -13,7 +13,7 @@ public class Server {
     public static void main(String[] args) {
         UserService userService = new UserServiceImpl();
 
-        ServiceProvider serviceProvider = new ServiceProvider();
+        ServiceProvider serviceProvider = new ServiceProvider("127.0.0.1", 666);
         serviceProvider.provideServiceInterface(userService);
 
         // 简单利用线程来获取服务

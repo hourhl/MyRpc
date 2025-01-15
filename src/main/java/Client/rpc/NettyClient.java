@@ -2,6 +2,8 @@ package Client.rpc;
 
 
 import Client.netty.Initializer;
+import Client.serviceCenter.ServiceCenter;
+import Client.serviceCenter.ZKServiceCenter;
 import common.Message.RpcRequest;
 import common.Message.RpcResponse;
 import io.netty.bootstrap.Bootstrap;
@@ -15,12 +17,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.java.Log;
 
+import java.net.InetSocketAddress;
+
 @AllArgsConstructor
 @Data
 @Log
 public class NettyClient implements BaseClient{
     private static final Bootstrap bootstrap;
     private static final EventLoopGroup eventLoopGroup;
+
+    private ServiceCenter serviceCenter;
+    public NettyClient(){
+        this.serviceCenter = new ZKServiceCenter();
+    }
 
     // 客户端初始化
     static {
@@ -31,6 +40,11 @@ public class NettyClient implements BaseClient{
 
     @Override
     public RpcResponse sendRequest(RpcRequest rpcRequest) {
+        // 获取服务的ip和端口
+        InetSocketAddress address = this.serviceCenter.serviceDiscovery(rpcRequest.getInterfaceName());
+        String host  = address.getHostName();
+        int port = address.getPort();
+
         Channel channel = null;
         try {
             ChannelFuture channelFuture = bootstrap.connect(host, port).sync();
