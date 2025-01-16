@@ -31,6 +31,7 @@ public class ZKRegisterCenter implements RegisterCenter{
             }
             String path = "/" + serviceName + "/" + getServiceAddress(serviceAddress);
             client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(path);
+            log.info("ZKRegisterCenter service registered " + serviceName);
         } catch (Exception e){
             e.printStackTrace();
         }

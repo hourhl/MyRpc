@@ -41,7 +41,9 @@ public class NettyClient implements BaseClient{
     @Override
     public RpcResponse sendRequest(RpcRequest rpcRequest) {
         // 获取服务的ip和端口
+        log.info("interfaceName : " + rpcRequest.getInterfaceName());
         InetSocketAddress address = this.serviceCenter.serviceDiscovery(rpcRequest.getInterfaceName());
+        log.info("get address :" + address);
         String host  = address.getHostName();
         int port = address.getPort();
 
