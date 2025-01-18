@@ -32,7 +32,9 @@ public class ServiceProvider {
 
         for(Class<?> clazz : interfaceName){
             interfaceProvider.put(clazz.getName(), service);
-            registerCenter.serviceRegister(clazz.getName(), new InetSocketAddress(host, port));
+            InetSocketAddress serviceAddress = new InetSocketAddress(host, port);
+            log.info("provideServiceInterface - serviceAddress:" + serviceAddress);
+            registerCenter.serviceRegister(clazz.getName(), serviceAddress);
             log.info("add interface - " + clazz.getName() + " : " + service);
         }
     }

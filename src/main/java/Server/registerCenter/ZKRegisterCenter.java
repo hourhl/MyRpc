@@ -8,6 +8,7 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 
 
 @Log
@@ -18,7 +19,7 @@ public class ZKRegisterCenter implements RegisterCenter{
     public ZKRegisterCenter() {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
         this.client = CuratorFrameworkFactory.builder().connectString("127.0.0.1:2181")
-                .sessionTimeoutMs(40000).retryPolicy(retryPolicy).build();
+                .sessionTimeoutMs(40000).retryPolicy(retryPolicy).namespace(ROOT_PATH).build();
         this.client.start();
         log.info("ZKRegisterCenter started");
     }
@@ -27,11 +28,11 @@ public class ZKRegisterCenter implements RegisterCenter{
     public void serviceRegister(String serviceName, InetSocketAddress serviceAddress){
         try {
             if(client.checkExists().forPath("/" + serviceName) == null){
-                client.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath("/" + serviceName);
+                this.client.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath("/" + serviceName);
             }
             String path = "/" + serviceName + "/" + getServiceAddress(serviceAddress);
-            client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(path);
-            log.info("ZKRegisterCenter service registered " + serviceName);
+            this.client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(path);
+            log.info("ZKRegisterCenter service registered " + serviceName + " and it's path is " + path);
         } catch (Exception e){
             e.printStackTrace();
         }
