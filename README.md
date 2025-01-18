@@ -5,8 +5,8 @@
 
 ## 技术栈：
 * Java
-* Consul
 * Netty
+* Zookeeper
 
 ## 核心功能
 * 服务注册和服务寻址
