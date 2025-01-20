@@ -1,5 +1,8 @@
 package Client.netty;
 
+import common.Serialize.myCode.myDecoder;
+import common.Serialize.myCode.myEncoder;
+import common.Serialize.mySerialize.JsonSerializer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -20,14 +23,9 @@ public class Initializer extends ChannelInitializer<SocketChannel> {
         // 计算消息长度，写入前4个字节
         pipeline.addLast(new LengthFieldPrepender(4));
         // 定义编码器
-        pipeline.addLast(new ObjectEncoder());
+        pipeline.addLast(new myDecoder());
         // 定义解码器
-        pipeline.addLast(new ObjectDecoder(new ClassResolver() {
-            @Override
-            public Class<?> resolve(String className) throws ClassNotFoundException {
-                return Class.forName(className);
-            }
-        }));
+        pipeline.addLast(new myEncoder(new JsonSerializer()));
 
         pipeline.addLast(new Handler());
     }
