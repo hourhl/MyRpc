@@ -13,6 +13,9 @@ import java.util.List;
 public class myDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+        // 数据包格式
+        // 包类型 + 序列化器类型 + 数据长度 + 数据
+        // 优点：防止粘包，格式清晰
         short messageType = in.readShort();
         if(messageType != MessageType.REQUEST.getCode() && messageType != MessageType.RESPONSE.getCode()){
             log.info("Do not support this message type");
@@ -20,7 +23,7 @@ public class myDecoder extends ByteToMessageDecoder {
         }
 
         short serializeType = in.readShort();
-        Serializer serializer = Serializer.getSerializerByCode(serializeType);
+        Serializer serializer = Serializer.getSerializerByType(serializeType);
         if(serializer == null){
             log.info("Get Serializer failed");
             throw new RuntimeException("Get Serializer failed");

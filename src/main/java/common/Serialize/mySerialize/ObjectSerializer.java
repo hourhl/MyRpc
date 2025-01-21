@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+// 基于java原生序列化机制
 public class ObjectSerializer implements Serializer{
 
     @Override
@@ -12,6 +13,7 @@ public class ObjectSerializer implements Serializer{
         byte[] bytes = null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
+            // 关联bos，将oos序列化后的结果写入bos中
             ObjectOutputStream oos = new ObjectOutputStream(bos);
             oos.writeObject(obj);
             oos.flush();

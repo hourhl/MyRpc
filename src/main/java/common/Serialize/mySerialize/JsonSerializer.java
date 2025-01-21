@@ -6,9 +6,11 @@ import common.Message.RpcRequest;
 import common.Message.RpcResponse;
 import lombok.extern.java.Log;
 
+// 基于fastjson的序列化器
 @Log
 public class JsonSerializer implements Serializer{
 
+    // 将对象序列化为json格式的字节数组
     @Override
     public byte[] serialize(Object obj){
         byte[] bytes = JSONObject.toJSONBytes(obj);
