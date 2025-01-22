@@ -24,7 +24,8 @@ public class Initializer extends ChannelInitializer<SocketChannel> {
 
         // 定义编解码器
         pipeline.addLast(new myDecoder());
-        pipeline.addLast(new Handler(serviceProvider));
         pipeline.addLast(new myEncoder(new JsonSerializer()));
+        pipeline.addLast(new Handler(serviceProvider));
+
     }
 }

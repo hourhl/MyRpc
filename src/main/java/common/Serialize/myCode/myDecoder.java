@@ -34,5 +34,6 @@ public class myDecoder extends ByteToMessageDecoder {
         in.readBytes(data);
         Object deserializeData = serializer.deserialize(data, messageType);
         out.add(deserializeData);
+        log.info(deserializeData.toString());
     }
 }

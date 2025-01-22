@@ -27,10 +27,20 @@ public class JsonSerializer implements Serializer{
                 Object[] objects = new Object[request.getParameters().length];
                 for(int i = 0; i < objects.length; i++){
                     Class<?> paramsType = request.getParamTypes()[i];
-                    if(!paramsType.isAssignableFrom(request.getParameters()[i].getClass())){
-                        objects[i] = JSONObject.toJavaObject((JSONObject) request.getParameters()[i], request.getParamTypes()[i]);
-                    } else {
+                    Object param = request.getParameters()[i];
+                    if(paramsType.isPrimitive()) {
+                        // 如果参数是基本类型，找它的包装类型
+                        Class<?> wrapperType = getWrapperType(paramsType);
+                        if (wrapperType.isInstance(param)) {
+                            objects[i] = param;
+                        } else {
+                            throw new IllegalArgumentException("ParameterType miss match: expected : " + paramsType.getName() + ", found : " + param.getClass().getName());
+                        }
+                    }
+                    else if(paramsType.isAssignableFrom(param.getClass())){
                         objects[i] = request.getParameters()[i];
+                    } else {
+                        throw new IllegalArgumentException("ParameterType miss match: expected : " + paramsType.getName() + ", found : " + param.getClass().getName());
                     }
                 }
                 request.setParameters(objects);
@@ -39,9 +49,24 @@ public class JsonSerializer implements Serializer{
 
             case 1:
                 RpcResponse response = JSON.parseObject(bytes, RpcResponse.class);
+                Object data = response.getData();
                 Class<?> dataType = response.getData().getClass();
-                if(!dataType.isAssignableFrom(response.getData().getClass())){
-                    response.setData(JSONObject.toJavaObject((JSONObject) response.getData(), dataType));
+//                if(!dataType.isAssignableFrom(response.getData().getClass())){
+//                    response.setData(JSONObject.toJavaObject((JSONObject) response.getData(), dataType));
+//                }
+                if(dataType.isPrimitive()) {
+                    // 如果参数是基本类型，找它的包装类型
+                    Class<?> wrapperType = getWrapperType(dataType);
+                    if (wrapperType.isInstance(data)) {
+                        response.setData(data);
+                    } else {
+                        throw new IllegalArgumentException("ParameterType miss match: expected : " + dataType.getName() + ", found : " + data.getClass().getName());
+                    }
+                }
+                else if(dataType.isAssignableFrom(data.getClass())){
+                    response.setData(data);
+                } else {
+                    throw new IllegalArgumentException("ParameterType miss match: expected : " + dataType.getName() + ", found : " + data.getClass().getName());
                 }
                 obj = response;
                 break;
@@ -56,5 +81,17 @@ public class JsonSerializer implements Serializer{
     @Override
     public int getType(){
         return 1;
+    }
+
+    private Class<?> getWrapperType(Class<?> paramType){
+        if(paramType == int.class) return Integer.class;
+        if(paramType == long.class) return Long.class;
+        if(paramType == float.class) return Float.class;
+        if(paramType == double.class) return Double.class;
+        if(paramType == boolean.class) return Boolean.class;
+        if(paramType == byte.class) return Byte.class;
+        if(paramType == char.class) return Character.class;
+        if(paramType == short.class) return Short.class;
+        return paramType;
     }
 }

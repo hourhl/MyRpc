@@ -33,6 +33,7 @@ public class myEncoder extends MessageToByteEncoder {
         byte[] data = serializer.serialize(msg);
         out.writeInt(data.length);
         out.writeBytes(data);
+        log.info(out.toString());
     }
 
 }
