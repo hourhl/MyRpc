@@ -19,12 +19,11 @@ public class Initializer extends ChannelInitializer<SocketChannel> {
     protected void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
 
-        // 定义解码器
+        // 入站定义解码器
         pipeline.addLast(new myDecoder());
-        // 定义编码器
-        pipeline.addLast(new myEncoder(new JsonSerializer()));
 //        pipeline.addLast(new myEncoder(Serializer.getSerializerByType(1)));
-
         pipeline.addLast(new Handler());
+        // 出站定义编码器
+        pipeline.addLast(new myEncoder(new JsonSerializer()));
     }
 }
