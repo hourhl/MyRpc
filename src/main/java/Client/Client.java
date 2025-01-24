@@ -1,5 +1,7 @@
 package Client;
 
+import com.alibaba.fastjson.JSONObject;
+import common.Message.RpcRequest;
 import common.Service.UserService;
 import common.pojo.User;
 import lombok.extern.java.Log;
@@ -11,7 +13,7 @@ public class Client {
         Proxy clientProxy = new Proxy();
         UserService userServiceProxy = clientProxy.getProxy(UserService.class);
 
-        User user = userServiceProxy.getUserById(6);
+        User user = userServiceProxy.getUserById(9);
         log.info("getUserById from server : " + user.toString());
     }
 }

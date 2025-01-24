@@ -49,24 +49,11 @@ public class JsonSerializer implements Serializer{
 
             case 1:
                 RpcResponse response = JSON.parseObject(bytes, RpcResponse.class);
-                Object data = response.getData();
-                Class<?> dataType = response.getData().getClass();
-//                if(!dataType.isAssignableFrom(response.getData().getClass())){
-//                    response.setData(JSONObject.toJavaObject((JSONObject) response.getData(), dataType));
-//                }
-                if(dataType.isPrimitive()) {
-                    // 如果参数是基本类型，找它的包装类型
-                    Class<?> wrapperType = getWrapperType(dataType);
-                    if (wrapperType.isInstance(data)) {
-                        response.setData(data);
-                    } else {
-                        throw new IllegalArgumentException("ParameterType miss match: expected : " + dataType.getName() + ", found : " + data.getClass().getName());
-                    }
-                }
-                else if(dataType.isAssignableFrom(data.getClass())){
-                    response.setData(data);
-                } else {
-                    throw new IllegalArgumentException("ParameterType miss match: expected : " + dataType.getName() + ", found : " + data.getClass().getName());
+                log.info("response :" + response);
+                Class<?> dataType = response.getDataType();
+//                log.info("dataType is " + dataType + " response.getData.getClass() : " + response.getData().getClass());
+                if(!dataType.isAssignableFrom(response.getData().getClass())) {
+                    response.setData(JSONObject.toJavaObject((JSONObject) response.getData(), dataType));
                 }
                 obj = response;
                 break;

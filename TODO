@@ -1,1 +1,1 @@
-1 测试2.1 - 加上序列化器
+1. 学习netty的channelpipeline，确定encoder和decoder是否需要按照固定顺序来设置

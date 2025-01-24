@@ -3,6 +3,7 @@ package Client;
 import Client.rpc.BaseClient;
 import Client.rpc.NettyClient;
 import Client.rpc.SocketClient;
+import com.alibaba.fastjson.JSONObject;
 import common.Message.RpcRequest;
 import common.Message.RpcResponse;
 import lombok.AllArgsConstructor;
@@ -16,14 +17,6 @@ import java.lang.reflect.Method;
 @Log
 public class Proxy implements InvocationHandler {
     private BaseClient client;
-
-//    public Proxy(String host, int port, int type){
-//        if(type == 0){
-//            client = new SocketClient(host, port);
-//        } else if (type == 1){
-//            client = new NettyClient(host, port);
-//        }
-//    }
     public Proxy(){
         client = new NettyClient();
     }
