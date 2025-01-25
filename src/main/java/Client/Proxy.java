@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 @Log
 public class Proxy implements InvocationHandler {
     private BaseClient client;
-    public Proxy(){
+    public Proxy() throws InterruptedException {
         client = new NettyClient();
     }
 

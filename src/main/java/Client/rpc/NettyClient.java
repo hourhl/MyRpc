@@ -27,7 +27,7 @@ public class NettyClient implements BaseClient{
     private static final EventLoopGroup eventLoopGroup;
 
     private ServiceCenter serviceCenter;
-    public NettyClient(){
+    public NettyClient() throws InterruptedException {
         this.serviceCenter = new ZKServiceCenter();
     }
 
@@ -62,14 +62,14 @@ public class NettyClient implements BaseClient{
             return rpcResponse;
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } finally {
-            shutdown();
+//        } finally {
+//            shutdown();
         }
         return null;
     }
 
-    public void shutdown() {
-        eventLoopGroup.shutdownGracefully();
-        log.info("NettyClient shutdown");
-    }
+//    public void shutdown() {
+//        eventLoopGroup.shutdownGracefully();
+//        log.info("NettyClient shutdown");
+//    }
 }

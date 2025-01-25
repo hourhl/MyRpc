@@ -7,6 +7,7 @@ import Server.server.impl.SimpleRPCRPCServer;
 import Server.server.impl.ThreadPoolRPCRPCServer;
 import common.Service.Impl.UserServiceImpl;
 import common.Service.UserService;
+import lombok.extern.java.Log;
 
 public class Server {
 
@@ -29,3 +30,5 @@ public class Server {
         rpcServer.start(666);
     }
 }
+
+
