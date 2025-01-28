@@ -34,6 +34,7 @@ public class ZKRegisterCenter implements RegisterCenter{
             String path = "/" + serviceName + "/" + getServiceAddress(serviceAddress);
             this.client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(path);
             log.info("ZKRegisterCenter service registered " + serviceName + " and it's path is " + path);
+            // 如果可以超时重试，则加入zookeeper的/RETRY路径下
             if (canRetry) {
                 path = "/" + RETRY + serviceName;
                 client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(path);
