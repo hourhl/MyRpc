@@ -15,6 +15,7 @@ import java.util.List;
 public class ZKRegisterCenter implements RegisterCenter{
     private CuratorFramework client;
     private static final String ROOT_PATH = "MyRPC";
+    private static final String RETRY = "canRetry";
 
     public ZKRegisterCenter() {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
@@ -25,7 +26,7 @@ public class ZKRegisterCenter implements RegisterCenter{
     }
 
     @Override
-    public void serviceRegister(String serviceName, InetSocketAddress serviceAddress){
+    public void serviceRegister(String serviceName, InetSocketAddress serviceAddress, boolean canRetry){
         try {
             if(client.checkExists().forPath("/" + serviceName) == null){
                 this.client.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath("/" + serviceName);
@@ -33,6 +34,10 @@ public class ZKRegisterCenter implements RegisterCenter{
             String path = "/" + serviceName + "/" + getServiceAddress(serviceAddress);
             this.client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(path);
             log.info("ZKRegisterCenter service registered " + serviceName + " and it's path is " + path);
+            if (canRetry) {
+                path = "/" + RETRY + serviceName;
+                client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(path);
+            }
         } catch (Exception e){
             e.printStackTrace();
         }

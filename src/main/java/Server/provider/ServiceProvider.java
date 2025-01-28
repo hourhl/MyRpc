@@ -25,7 +25,7 @@ public class ServiceProvider {
     }
 
     // 注册服务
-    public void provideServiceInterface(Object service) {
+    public void provideServiceInterface(Object service, boolean canRetry) {
         String serviceName = service.getClass().getName();
         log.info("provideServiceInterface - serviceName :" + serviceName);
         Class<?>[] interfaceName = service.getClass().getInterfaces();
@@ -34,7 +34,7 @@ public class ServiceProvider {
             interfaceProvider.put(clazz.getName(), service);
             InetSocketAddress serviceAddress = new InetSocketAddress(host, port);
             log.info("provideServiceInterface - serviceAddress:" + serviceAddress);
-            registerCenter.serviceRegister(clazz.getName(), serviceAddress);
+            registerCenter.serviceRegister(clazz.getName(), serviceAddress, canRetry);
             log.info("add interface - " + clazz.getName() + " : " + service);
         }
     }

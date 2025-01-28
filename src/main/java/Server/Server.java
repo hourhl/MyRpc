@@ -15,7 +15,7 @@ public class Server {
         UserService userService = new UserServiceImpl();
 
         ServiceProvider serviceProvider = new ServiceProvider("127.0.0.1", 666);
-        serviceProvider.provideServiceInterface(userService);
+        serviceProvider.provideServiceInterface(userService, true);
 
         // 简单利用线程来获取服务
 //        RPCServer rpcServer = new SimpleRPCRPCServer(serviceProvider);

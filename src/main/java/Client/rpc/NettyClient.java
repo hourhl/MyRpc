@@ -19,7 +19,6 @@ import lombok.extern.java.Log;
 
 import java.net.InetSocketAddress;
 
-@AllArgsConstructor
 @Data
 @Log
 public class NettyClient implements BaseClient{
@@ -27,7 +26,7 @@ public class NettyClient implements BaseClient{
     private static final EventLoopGroup eventLoopGroup;
 
     private ServiceCenter serviceCenter;
-    public NettyClient() throws InterruptedException {
+    public NettyClient(ServiceCenter serviceCenter) throws InterruptedException {
         this.serviceCenter = new ZKServiceCenter();
     }
 

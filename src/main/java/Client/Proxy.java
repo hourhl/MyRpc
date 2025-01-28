@@ -1,8 +1,11 @@
 package Client;
 
+import Client.retry.guavaRetry;
 import Client.rpc.BaseClient;
 import Client.rpc.NettyClient;
 import Client.rpc.SocketClient;
+import Client.serviceCenter.ServiceCenter;
+import Client.serviceCenter.ZKServiceCenter;
 import com.alibaba.fastjson.JSONObject;
 import common.Message.RpcRequest;
 import common.Message.RpcResponse;
@@ -17,8 +20,10 @@ import java.lang.reflect.Method;
 @Log
 public class Proxy implements InvocationHandler {
     private BaseClient client;
+    private ServiceCenter serviceCenter;
     public Proxy() throws InterruptedException {
-        client = new NettyClient();
+        serviceCenter = new ZKServiceCenter();
+        client = new NettyClient(serviceCenter);
     }
 
     @Override
@@ -32,7 +37,12 @@ public class Proxy implements InvocationHandler {
                 .paramTypes(method.getParameterTypes()).build();
 
         log.info("Send request : " + request);
-        RpcResponse response = client.sendRequest(request);
+        RpcResponse response;
+        if (serviceCenter.checkRetry(request.getInterfaceName())){
+            response = new guavaRetry().sendServiceWithRetry(request, client);
+        } else {
+            response = client.sendRequest(request);
+        }
         return response.getData();
     }
 

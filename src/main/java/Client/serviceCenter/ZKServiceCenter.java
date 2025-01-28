@@ -1,6 +1,7 @@
 package Client.serviceCenter;
 
 import Client.cache.serviceCache;
+import Client.serviceCenter.balance.impl.HashBalance;
 import Client.serviceCenter.zkWatcher.ZKWatcher;
 import lombok.extern.java.Log;
 import org.apache.curator.RetryPolicy;
@@ -15,6 +16,7 @@ import java.util.List;
 public class ZKServiceCenter implements ServiceCenter{
     private CuratorFramework client;
     private static final String ROOT_PATH = "MyRPC";
+    private static final String RETRY = "CanRetry";
     private serviceCache cache;
 
     //初始化zookeeper客户端
@@ -41,7 +43,8 @@ public class ZKServiceCenter implements ServiceCenter{
                 log.info("Cannot find serviceLists");
                 serviceLists = this.client.getChildren().forPath("/" + serviceName);
             }
-            String address = serviceLists.get(0);
+            log.info("serviceLists : " + serviceLists);
+            String address = new HashBalance().balance(serviceLists);
             return parseAddress(address);
         } catch (Exception e){
             e.printStackTrace();
@@ -52,5 +55,22 @@ public class ZKServiceCenter implements ServiceCenter{
     private InetSocketAddress parseAddress(String address){
         String[] result = address.split(":");
         return new InetSocketAddress(result[0], Integer.parseInt(result[1]));
+    }
+
+    @Override
+    public boolean checkRetry(String serviceName) {
+        boolean canRetry = false;
+        try {
+            List<String> serviceList = this.client.getChildren().forPath("/" + RETRY);
+            for (String s : serviceList) {
+                if(s.equals(serviceName)){
+                    log.info("Service : " + serviceName + "can retry");
+                    canRetry = true;
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return canRetry;
     }
 }
