@@ -27,7 +27,7 @@ public class NettyClient implements BaseClient{
 
     private ServiceCenter serviceCenter;
     public NettyClient(ServiceCenter serviceCenter) throws InterruptedException {
-        this.serviceCenter = new ZKServiceCenter();
+        this.serviceCenter = serviceCenter;
     }
 
     // 客户端初始化

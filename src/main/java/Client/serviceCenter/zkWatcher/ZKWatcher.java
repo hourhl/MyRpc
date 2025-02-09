@@ -24,6 +24,7 @@ public class ZKWatcher {
         curatorCache.listenable().addListener(new CuratorCacheListener() {
             @Override
             public void event(Type type, ChildData childData, ChildData childData1) {
+                // childData : /[root]/[serviceName]/[serviceAddress]
                 switch (type.name()) {
                     case "NODE_CREATED":
                         String[] paths = parsePath(childData1);
