@@ -10,7 +10,7 @@
 
     <!-- 项目构建的依赖 -->
     <dependencies>
-        <!-- 示例：添加 Lombok 依赖 -->
+        <!-- 添加 Lombok 依赖 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
