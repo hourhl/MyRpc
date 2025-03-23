@@ -64,7 +64,7 @@ public class HashBalance implements LoadBalance {
         // 在哈希环上顺时针找到第一个服务器节点
         SortedMap<Integer, String> subMap = shards.tailMap(hash);
         if(subMap.isEmpty()){
-            key = shards.lastKey();
+            key = shards.firstKey();
         } else {
             key = subMap.firstKey();
         }
