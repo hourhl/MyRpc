@@ -24,6 +24,7 @@ public class JsonSerializer implements Serializer{
         switch (messageType){
             case 0:
                 RpcRequest request = JSON.parseObject(bytes, RpcRequest.class);
+                log.info("request :" + request);
                 Object[] objects = new Object[request.getParameters().length];
                 for(int i = 0; i < objects.length; i++){
                     Class<?> paramsType = request.getParamTypes()[i];

@@ -17,7 +17,8 @@ public class RpcResponse implements Serializable {
     private Object data;
     private Class<?> dataType;
 
-    // success 和 fail方法不需要依赖实例，因此将其定义为static类型
+    // success 和 fail方法不需要依赖实例，因此将其定义为static类型，可以直接通过RpcResponse.success来调用
+    // 类只有内部类才能使用static来修饰
     public static RpcResponse success(Object data) {
         return RpcResponse.builder()
                 .code(200)
