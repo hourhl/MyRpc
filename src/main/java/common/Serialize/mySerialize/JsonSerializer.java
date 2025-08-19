@@ -23,22 +23,26 @@ public class JsonSerializer implements Serializer{
         // messageType - 0: request ; 1: response
         switch (messageType){
             case 0:
+                // 注意：json.parseObject得到的所有值都是对象类型，不会是基本类型
                 RpcRequest request = JSON.parseObject(bytes, RpcRequest.class);
                 log.info("request :" + request);
                 Object[] objects = new Object[request.getParameters().length];
+                // fastjson的解析可能和预期的参数类型不匹配，需要额外处理
                 for(int i = 0; i < objects.length; i++){
                     Class<?> paramsType = request.getParamTypes()[i];
                     Object param = request.getParameters()[i];
-                    if(paramsType.isPrimitive()) {
+                    // 这一个if的作用是为了排除fastjson解析错误的情况
+                    // 因为fastjson解析的时候，会把所有的数字按照自己的标准来解析，和原定的request的参数类型可能不一致
+                    if(paramsType.isPrimitive()) { // 判断是否基本类型（int , double, float等）
                         // 如果参数是基本类型，找它的包装类型
                         Class<?> wrapperType = getWrapperType(paramsType);
-                        if (wrapperType.isInstance(param)) {
+                        if (wrapperType.isInstance(param)) { // 验证参数是否是包装类型的实例
                             objects[i] = param;
                         } else {
                             throw new IllegalArgumentException("ParameterType miss match: expected : " + paramsType.getName() + ", found : " + param.getClass().getName());
                         }
                     }
-                    else if(paramsType.isAssignableFrom(param.getClass())){
+                    else if(paramsType.isAssignableFrom(param.getClass())){ // 验证paramsType是否与param类型相同，或是其父类接口
                         objects[i] = request.getParameters()[i];
                     } else {
                         throw new IllegalArgumentException("ParameterType miss match: expected : " + paramsType.getName() + ", found : " + param.getClass().getName());
