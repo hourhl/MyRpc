@@ -35,12 +35,14 @@ public class Proxy implements InvocationHandler {
                 .methodName(method.getName())
                 .parameters(args)
                 .paramTypes(method.getParameterTypes()).build();
+        log.info("RpcRequest: interfaceName:" + request.getInterfaceName() + " methodName: " + request.getMethodName());
 
         log.info("Send request : " + request);
         RpcResponse response;
         if (serviceCenter.checkRetry(request.getInterfaceName())){
             response = new guavaRetry().sendServiceWithRetry(request, client);
         } else {
+            log.info("No retry");
             response = client.sendRequest(request);
         }
         return response.getData();

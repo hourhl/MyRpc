@@ -28,6 +28,7 @@ public class ServiceProvider {
     public void provideServiceInterface(Object service, boolean canRetry) {
         String serviceName = service.getClass().getName();
         log.info("provideServiceInterface - serviceName :" + serviceName);
+        // 获取service实现的所有接口
         Class<?>[] interfaceName = service.getClass().getInterfaces();
 
         for(Class<?> clazz : interfaceName){

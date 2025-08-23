@@ -39,7 +39,7 @@ public class serviceCache {
             return null;
         }
         List<String> addresss = cache.get(serviceName);
-        log.info("Get serviceAddress:" + serviceName + "(" + addresss + ")");
+        log.info("Get serviceAddress:" + serviceName + "(" + addresss + ") from cache");
         return addresss;
     }
 
