@@ -13,7 +13,7 @@ public class Client {
         Proxy clientProxy = new Proxy();
         UserService userServiceProxy = clientProxy.getProxy(UserService.class);
 
-        User user1 = userServiceProxy.getUserById(9);
+        User user1 = userServiceProxy.getUserById(82);
         log.info("getUserById from server : " + user1.toString());
 //
 //        User user2 = userServiceProxy.getUserById(6);

@@ -1,7 +1,12 @@
 package common.Serialize.mySerialize;
 
+import common.Exception.SerializeException;
 import common.Message.RpcRequest;
 import common.Message.RpcResponse;
+import io.protostuff.LinkedBuffer;
+import io.protostuff.ProtobufIOUtil;
+import io.protostuff.Schema;
+import io.protostuff.runtime.RuntimeSchema;
 import lombok.extern.java.Log;
 
 @Log
@@ -13,10 +18,24 @@ public class ProtoStuffSerializer implements Serializer{
             throw new IllegalArgumentException("obj is null");
         }
 
+        // 获取对象schema
+        Schema schema = RuntimeSchema.getSchema(obj.getClass());
+
+        // 使用LinkedBuffer来创建缓冲区
+        LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
+
+        // 序列化对象为字节数组
+        byte[] bytes = null;
+        try {
+            bytes = ProtobufIOUtil.toByteArray(obj, schema, buffer);
+        } finally {
+            buffer.clear();
+        }
+        return bytes;
     }
 
     @Override
-    Object deserialize(byte[] bytes, int messageType){
+    public Object deserialize(byte[] bytes, int messageType){
         if(bytes == null || bytes.length == 0){
             log.info("ProtoStuffSerializer deserialize fail: bytes is null");
             throw new IllegalArgumentException("bytes is null");
@@ -24,6 +43,20 @@ public class ProtoStuffSerializer implements Serializer{
 
         Class<?> clazz = getMessageClassByType(messageType);
 
+        // 获取对象schema
+        Schema schema = RuntimeSchema.getSchema(clazz);
+
+        // 创建一个空对象实例
+        Object obj = null;
+        try{
+            obj = clazz.getDeclaredConstructor().newInstance();
+        } catch (Exception e){
+            log.info("ProtoStuffSerializer deserialize fail: " + e);
+            throw new SerializeException("Deserialize fail:" + e.getMessage());
+        }
+
+        ProtobufIOUtil.mergeFrom(bytes, obj, schema);
+        return obj;
     }
 
     @Override

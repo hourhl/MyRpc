@@ -3,6 +3,7 @@ package Client.netty;
 import common.Serialize.myCode.myDecoder;
 import common.Serialize.myCode.myEncoder;
 import common.Serialize.mySerialize.JsonSerializer;
+import common.Serialize.mySerialize.ProtoStuffSerializer;
 import common.Serialize.mySerialize.Serializer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -24,7 +25,8 @@ public class Initializer extends ChannelInitializer<SocketChannel> {
 //        pipeline.addLast(new myEncoder(Serializer.getSerializerByType(1)));
 
         // 出站定义编码器
-        pipeline.addLast(new myEncoder(new JsonSerializer()));
+//        pipeline.addLast(new myEncoder(new JsonSerializer()));
+        pipeline.addLast(new myEncoder(new ProtoStuffSerializer()));
         pipeline.addLast(new Handler());
     }
 }

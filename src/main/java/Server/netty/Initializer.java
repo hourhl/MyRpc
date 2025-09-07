@@ -4,6 +4,7 @@ import Server.provider.ServiceProvider;
 import common.Serialize.myCode.myDecoder;
 import common.Serialize.myCode.myEncoder;
 import common.Serialize.mySerialize.JsonSerializer;
+import common.Serialize.mySerialize.ProtoStuffSerializer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -24,7 +25,8 @@ public class Initializer extends ChannelInitializer<SocketChannel> {
 
         // 定义编解码器
         pipeline.addLast(new myDecoder());
-        pipeline.addLast(new myEncoder(new JsonSerializer()));
+//        pipeline.addLast(new myEncoder(new JsonSerializer()));
+        pipeline.addLast(new myEncoder(new ProtoStuffSerializer()));
         pipeline.addLast(new Handler(serviceProvider));
 
     }
